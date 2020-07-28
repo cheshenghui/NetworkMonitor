@@ -1,16 +1,21 @@
 package com.csh.networkmonitor.ui
 
+import android.app.Activity
 import android.content.Intent
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.view.View
+import android.view.ViewGroup
+import android.view.Window
+import android.view.WindowManager
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
 import com.csh.networkmonitor.NetworkMonitor
 import com.csh.networkmonitor.R
 import com.csh.networkmonitor.net.HttpEventListener
@@ -66,6 +71,7 @@ class NetCheckActivity: AppCompatActivity(), HttpEventListener.TimeConsumingList
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setStatusBarColor(this, Color.LTGRAY)
         setContentView(R.layout.activity_network_check)
 
         checking.visibility = View.VISIBLE
@@ -213,6 +219,27 @@ class NetCheckActivity: AppCompatActivity(), HttpEventListener.TimeConsumingList
         runOnUiThread {
             checking.visibility = View.GONE
             onCheckOver(true)
+        }
+    }
+
+    private fun setStatusBarColor(activity: Activity, statusColor: Int) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            val window: Window = activity.window
+            //取消状态栏透明
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+            //添加Flag把状态栏设为可绘制模式
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+            //设置状态栏颜色
+            window.statusBarColor = statusColor
+            //设置系统状态栏处于可见状态
+            window.getDecorView().systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
+            //让view不根据系统窗口来调整自己的布局
+            val mContentView = window.findViewById(Window.ID_ANDROID_CONTENT) as ViewGroup
+            val mChildView = mContentView.getChildAt(0)
+            if (mChildView != null) {
+                mChildView.fitsSystemWindows = false
+                ViewCompat.requestApplyInsets(mChildView)
+            }
         }
     }
 
