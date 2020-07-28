@@ -17,6 +17,11 @@ import java.io.InputStreamReader
 
 
 object NetworkMonitor {
+    const val ERROR_CODE = 1000
+    const val ERROR_CODE_PERMISSION = 90000
+    const val ERROR_CODE_NET_CONNECT = 80000
+    const val ERROR_CODE_SERVER_CONNECT = 70000
+
     private var rxTotal: Long = 0
     private var txTotal: Long = 0
     private var rxWifi: Long = 0
@@ -86,7 +91,7 @@ object NetworkMonitor {
             listener?.permissionCheckStart()
             delay(500)
             if (!hasPermission) {
-                listener?.error(90000, "没有网络权限")
+                listener?.error(ERROR_CODE_PERMISSION, "没有网络权限")
                 return@launch
             }
             listener?.permissionOK()
@@ -97,7 +102,7 @@ object NetworkMonitor {
             listener?.netConnectCheckStart()
             delay(800)
             if (!hasConnected) {
-                listener?.error(80000, "网络连接失败")
+                listener?.error(ERROR_CODE_NET_CONNECT, "网络连接失败")
                 return@launch
             }
             listener?.netConnectOk()
@@ -108,7 +113,7 @@ object NetworkMonitor {
             listener?.serverConnectCheckStart()
             delay(800)
             if (!serverConnected) {
-                listener?.error(70000, "服务器连接失败")
+                listener?.error(ERROR_CODE_SERVER_CONNECT, "服务器连接失败")
                 return@launch
             }
             listener?.serverConnectOk()

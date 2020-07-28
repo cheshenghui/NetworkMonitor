@@ -1,5 +1,6 @@
 package com.csh.networkmonitor.net
 
+import com.csh.networkmonitor.NetworkMonitor
 import okhttp3.*
 import java.io.IOException
 import java.net.InetAddress
@@ -22,7 +23,7 @@ class HttpEventListener(
         }
         if (name == "connectFailed"
             || name == "callFailed") {
-            listener?.error(1000, "连接失败")
+            listener?.error(NetworkMonitor.ERROR_CODE, "连接失败")
             return
         }
 
