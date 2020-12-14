@@ -111,16 +111,16 @@ object NetworkMonitor {
             }
             listener?.netConnectOk()
 
-            // 3 服务器连接情况
-            val serverConnected =
-                checkServerConnection(ipStr)
-            listener?.serverConnectCheckStart()
-            delay(800)
-            if (!serverConnected) {
-                listener?.error(ERROR_CODE_SERVER_CONNECT, "服务器连接失败")
-                return@launch
-            }
-            listener?.serverConnectOk()
+//            // 3 服务器连接情况
+//            val serverConnected =
+//                checkServerConnection(ipStr)
+//            listener?.serverConnectCheckStart()
+//            delay(800)
+//            if (!serverConnected) {
+//                listener?.error(ERROR_CODE_SERVER_CONNECT, "服务器连接失败")
+//                return@launch
+//            }
+//            listener?.serverConnectOk()
 
             // 4 监听
             listenerNetworkStatus(
@@ -176,26 +176,27 @@ object NetworkMonitor {
         }
     }
 
-
-    /**
-     * 检查服务器是连接情况
-     * @param ipString http(s)://example.com
-     */
-    private suspend fun checkServerConnection(ipString: String): Boolean {
-        return withContext(Dispatchers.IO) {
-            val ipHost = URL(ipString).host
-            val p = Runtime.getRuntime().exec("ping -c 1 -w 1 $ipHost")
-            val input: InputStream = p.inputStream
-            val ins = BufferedReader(InputStreamReader(input))
-            val stringBuffer = StringBuffer()
-            var content: String?
-            while (ins.readLine().also { content = it } != null) {
-                stringBuffer.append(content)
-            }
-            // 0 表示正常停止，即正常完成，未出现异常情况; 1 表示网络已连接，但是无法访问; 2 表示网络未连接
-            p.waitFor() == 0
-        }
-    }
+//
+//    /**
+//     * 检查服务器是连接情况
+//     * @param ipString http(s)://example.com
+//     */
+//    private suspend fun checkServerConnection(ipString: String): Boolean {
+//        return withContext(Dispatchers.IO) {
+//            val ipHost = URL(ipString).host
+//            val p = Runtime.getRuntime().exec("ping -c 1 -w 1 $ipHost")
+//            val input: InputStream = p.inputStream
+//            val ins = BufferedReader(InputStreamReader(input))
+//            val stringBuffer = StringBuffer()
+//            var content: String?
+//            while (ins.readLine().also { content = it } != null) {
+//                stringBuffer.append(content)
+//            }
+//            // 0 表示正常停止，即正常完成，未出现异常情况; 1 表示网络已连接，但是无法访问; 2 表示网络未连接
+//            val isOK = (p.waitFor() == 0)
+//            isOK
+//        }
+//    }
 
     /**
      * 监听 DNS耗时、连接耗时...

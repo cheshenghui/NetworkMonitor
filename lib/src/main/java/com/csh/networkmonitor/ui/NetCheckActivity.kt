@@ -165,7 +165,7 @@ class NetCheckActivity: AppCompatActivity(), HttpEventListener.TimeConsumingList
         serverConnectColor = ContextCompat.getColor(this, R.color.blue)
     }
 
-    override fun startConnect() {
+    override fun startDNSParse() {
         runOnUiThread {
             tv.text = "正在检测域名解析耗时"
         }
@@ -189,8 +189,10 @@ class NetCheckActivity: AppCompatActivity(), HttpEventListener.TimeConsumingList
         resultStr2 = "完成网络监测，请切换其他良好网络"
         when (type) {
             NetworkMonitor.ERROR_CODE -> {
+                serverConnectResult = "异常"
                 dnsTimeResult = "--"
                 connectTimeResult = "--"
+                serverConnectColor = ContextCompat.getColor(this, R.color.red)
                 dnsTimeColor = ContextCompat.getColor(this, R.color.red)
                 connectTimeColor = ContextCompat.getColor(this, R.color.red)
             }
@@ -201,10 +203,6 @@ class NetCheckActivity: AppCompatActivity(), HttpEventListener.TimeConsumingList
             NetworkMonitor.ERROR_CODE_NET_CONNECT -> {
                 connectResult = "异常"
                 connectColor = ContextCompat.getColor(this, R.color.red)
-            }
-            NetworkMonitor.ERROR_CODE_SERVER_CONNECT -> {
-                serverConnectResult = "异常"
-                serverConnectColor = ContextCompat.getColor(this, R.color.red)
             }
         }
         runOnUiThread {

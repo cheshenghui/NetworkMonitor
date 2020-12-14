@@ -19,21 +19,15 @@ class HttpEventListener(
     var connectStartTime = System.currentTimeMillis()
     private fun recordEventLog(name: String) {
         if (name == "callStart") {
-            listener?.startConnect()
+            listener?.serverConnectCheckStart()
         }
-        if (name == "connectFailed"
-            || name == "callFailed") {
-            listener?.error(NetworkMonitor.ERROR_CODE, "连接失败")
-            return
-        }
-
         if (name == "dnsStart") {
             dnsStartTime = System.currentTimeMillis()
+            listener?.startDNSParse()
         }
         if (name == "dnsEnd") {
             listener?.dnsParseTime(System.currentTimeMillis()-dnsStartTime)
         }
-
         if (name == "connectStart") {
             connectStartTime = System.currentTimeMillis()
         }
@@ -41,7 +35,13 @@ class HttpEventListener(
             listener?.connectTime(System.currentTimeMillis()-connectStartTime)
         }
         if (name == "callEnd") {
+            listener?.serverConnectOk()
             listener?.complete()
+        }
+        if (name == "connectFailed"
+            || name == "callFailed") {
+            listener?.error(NetworkMonitor.ERROR_CODE, "连接失败")
+            return
         }
     }
 
@@ -203,15 +203,16 @@ class HttpEventListener(
         fun netConnectCheckStart()
         fun netConnectOk()
 
+        //////////////////////////////
         fun serverConnectCheckStart()
         fun serverConnectOk()
 
-        fun startConnect()
+        fun startDNSParse()
         fun dnsParseTime(time: Long?)
         fun connectTime(time: Long?)
 
-        fun error(type: Int, desc: String)
         fun complete()
+        fun error(type: Int, desc: String)
     }
 
 }
