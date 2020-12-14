@@ -50,7 +50,8 @@ class FloatWindowService : Service() {
         fv = FloatWinView.Builder(
             this,
             floatView,
-            contentParams = FrameLayout.LayoutParams(dip2px(80f), FrameLayout.LayoutParams.WRAP_CONTENT)
+//            contentParams = FrameLayout.LayoutParams(dip2px(80f), FrameLayout.LayoutParams.WRAP_CONTENT)
+            contentParams = FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT)
         ).build()
         // 开始获取网速
         Observable.interval(1000, TimeUnit.MILLISECONDS)

@@ -14,6 +14,7 @@ import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStream
 import java.io.InputStreamReader
+import java.net.URL
 
 
 object NetworkMonitor {
@@ -81,6 +82,9 @@ object NetworkMonitor {
 
     //////////////////////////////////////////////////////////////////////////////////////////////
 
+    /**
+     * @param ipStr http(s)://example.com
+     */
     fun check(context: Context, ipStr: String="", listener: HttpEventListener.TimeConsumingListener?=null) {
         CoroutineScope(Dispatchers.Main).launch {
             // 1 网络权限
@@ -175,10 +179,12 @@ object NetworkMonitor {
 
     /**
      * 检查服务器是连接情况
+     * @param ipString http(s)://example.com
      */
     private suspend fun checkServerConnection(ipString: String): Boolean {
         return withContext(Dispatchers.IO) {
-            val p = Runtime.getRuntime().exec("ping -c 1 -w 1 $ipString")
+            val ipHost = URL(ipString).host
+            val p = Runtime.getRuntime().exec("ping -c 1 -w 1 $ipHost")
             val input: InputStream = p.inputStream
             val ins = BufferedReader(InputStreamReader(input))
             val stringBuffer = StringBuffer()
@@ -193,6 +199,7 @@ object NetworkMonitor {
 
     /**
      * 监听 DNS耗时、连接耗时...
+     * @param url http(s)://example.com
      */
     private fun listenerNetworkStatus(url: String, listen: HttpEventListener.TimeConsumingListener?=null) {
         val okClient =
@@ -207,7 +214,7 @@ object NetworkMonitor {
                     )
                 }
                 .build()
-        val request: Request = Request.Builder().get().url("http://$url").build()
+        val request: Request = Request.Builder().get().url(url).build()
         val call: Call = okClient.newCall(request)
         call.enqueue(object : Callback {
             override fun onFailure(call: Call?, e: IOException?) {

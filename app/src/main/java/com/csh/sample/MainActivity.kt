@@ -56,7 +56,7 @@ class MainActivity : AppCompatActivity() {
             } else {
                 open()
                 startActivity(Intent(this, NetCheckActivity::class.java)
-                    .putExtra(NetCheckActivity.EXTRA_IP, "www.baidu.com"))
+                    .putExtra(NetCheckActivity.EXTRA_IP, "https://www.baidu.com"))
             }
 
         }

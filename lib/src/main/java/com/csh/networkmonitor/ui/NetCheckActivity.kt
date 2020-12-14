@@ -28,7 +28,7 @@ class NetCheckActivity: AppCompatActivity(), HttpEventListener.TimeConsumingList
         const val EXTRA_IP = "EXTRA_IP"
     }
 
-    private val ipStr by lazy { intent.extras?.getString(EXTRA_IP)?:"" }
+    private val mIpStr by lazy { intent.extras?.getString(EXTRA_IP)?:"" }
 
     private val permissionLauncher : ActivityResultLauncher<Array<String>> =
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
@@ -80,14 +80,14 @@ class NetCheckActivity: AppCompatActivity(), HttpEventListener.TimeConsumingList
 
         btnChecking.setOnClickListener {
             btnChecking.showLoading()
-            NetworkMonitor.check(this, ipStr, this)
+            NetworkMonitor.check(this, mIpStr, this)
         }
 
         btnCheck.setOnClickListener {
             checking.visibility = View.VISIBLE
             resetCheckResult()
             btnChecking.showLoading()
-            NetworkMonitor.check(this, ipStr, this)
+            NetworkMonitor.check(this, mIpStr, this)
         }
 
     }

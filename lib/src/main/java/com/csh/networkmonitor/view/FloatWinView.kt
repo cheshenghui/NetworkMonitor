@@ -11,7 +11,7 @@ import android.widget.FrameLayout
 class FloatWinView(
     context: Context,
     contentView: View?,
-    private val wLayoutParams: WindowManager.LayoutParams?,
+    private val lp: WindowManager.LayoutParams?,
     contentParams: LayoutParams?=null
 ) : FrameLayout(context) {
 
@@ -23,7 +23,7 @@ class FloatWinView(
         isClickable = true
 
         // 添加到window
-        attach(wLayoutParams)
+        attach(lp)
     }
 
     private val windowManager: WindowManager
@@ -83,7 +83,7 @@ class FloatWinView(
     private var lastX: Int=0
     private var lastY: Int=0
     override fun dispatchTouchEvent(event: MotionEvent?): Boolean {
-        if (wLayoutParams == null) return super.dispatchTouchEvent(event)
+        if (lp == null) return super.dispatchTouchEvent(event)
         when (event?.action) {
             MotionEvent.ACTION_DOWN -> {
                 lastX = event.rawX.toInt()
@@ -91,20 +91,20 @@ class FloatWinView(
             }
             MotionEvent.ACTION_MOVE -> {
                 // 更新悬浮窗位置
-                update((wLayoutParams.x + (event.rawX - lastX)).toInt(),
-                    (wLayoutParams.y + (event.rawY - lastY)).toInt())
+                update((lp.x + (event.rawX - lastX)).toInt(),
+                    (lp.y + (event.rawY - lastY)).toInt())
                 lastX = event.rawX.toInt()
                 lastY = event.rawY.toInt()
             }
             MotionEvent.ACTION_UP -> {
                 // 贴边悬浮窗位置
-                if (wLayoutParams.x > getScreenWidth(context) / 2) {
-                    wLayoutParams.x =
+                if (lp.x > getScreenWidth(context) / 2) {
+                    lp.x =
                         getScreenWidth(context) - this.measuredWidth
                 } else {
-                    wLayoutParams.x = 0
+                    lp.x = 0
                 }
-                windowManager.updateViewLayout(this, wLayoutParams)
+                windowManager.updateViewLayout(this, lp)
             }
         }
         return super.dispatchTouchEvent(event)
@@ -141,7 +141,7 @@ class FloatWinView(
                 )
                 params.format = PixelFormat.RGBA_8888
 //                params.gravity = Gravity.RIGHT or Gravity.CENTER_VERTICAL
-                params.gravity = Gravity.LEFT or Gravity.TOP
+                params.gravity = Gravity.CENTER_HORIZONTAL
                 return params
             }
         }
