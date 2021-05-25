@@ -68,7 +68,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun open() {
-//        val fv = FloatWinView.Builder(
+//        val fv = FloatWinView.Builder(//test
 //            this,
 //            LayoutInflater.from(this).inflate(R.layout.float_window_view, null, false)
 //        ).build()
